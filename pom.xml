@@ -11,6 +11,7 @@
         <module>aop</module>
         <module>string</module>
         <module>concurrent</module>
+        <module>GenerateClass</module>
     </modules>
     <packaging>pom</packaging>
 </project>
