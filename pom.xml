@@ -12,6 +12,7 @@
         <module>string</module>
         <module>concurrent</module>
         <module>GenerateClass</module>
+        <module>storm</module>
     </modules>
     <packaging>pom</packaging>
 </project>
