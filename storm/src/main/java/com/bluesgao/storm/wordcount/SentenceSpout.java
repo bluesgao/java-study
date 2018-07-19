@@ -26,6 +26,7 @@ public class SentenceSpout extends BaseRichSpout {
     }
 
     public void nextTuple() {
+        System.out.println("SentenceSpout nextTuple:发射数据："+ sentences[index]);
         this.collector.emit(new Values(sentences[index]));
         index++;
         if (index >= sentences.length) {
@@ -38,6 +39,7 @@ public class SentenceSpout extends BaseRichSpout {
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("sentences"));
+        System.out.println("SentenceSpout 定义格式...");
+        outputFieldsDeclarer.declare(new Fields("sentence"));
     }
 }

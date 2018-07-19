@@ -22,6 +22,8 @@ public class ReportBolt extends BaseRichBolt {
     }
 
     public void execute(Tuple tuple) {
+        System.out.println("ReportBolt 接收的消息:" + tuple.toString());
+
         String word = tuple.getStringByField("word");
         Long count = tuple.getLongByField("count");
         this.counts.put(word, count);

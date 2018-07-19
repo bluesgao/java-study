@@ -27,7 +27,10 @@ public class WordCountBolt extends BaseRichBolt {
     }
 
     public void execute(Tuple tuple) {
+        System.out.println("WordCountBolt 接收的消息:" + tuple.toString());
+
         String word = tuple.getStringByField("word");
+
         Long count = this.counts.get(word);
         if (count == null) {
             count = 0L;
