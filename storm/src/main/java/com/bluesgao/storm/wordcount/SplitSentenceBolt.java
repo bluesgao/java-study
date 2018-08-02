@@ -24,6 +24,8 @@ public class SplitSentenceBolt extends BaseRichBolt {
     }
 
     public void execute(Tuple tuple) {
+        System.out.println("SplitSentenceBolt 接收的消息:" + tuple.toString());
+
         String sentence = tuple.getStringByField("sentence");
         String[] words = sentence.split(" ");
         for (String word : words) {

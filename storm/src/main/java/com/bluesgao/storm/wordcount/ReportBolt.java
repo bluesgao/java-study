@@ -8,6 +8,7 @@ import org.apache.storm.tuple.Tuple;
 
 import java.util.*;
 
+
 /**
  * ClassName: ReportBolt
  * Desc: TODO
@@ -22,16 +23,19 @@ public class ReportBolt extends BaseRichBolt {
     }
 
     public void execute(Tuple tuple) {
+        System.out.println("ReportBolt 接收的消息:" + tuple.toString());
+
         String word = tuple.getStringByField("word");
         Long count = tuple.getLongByField("count");
         this.counts.put(word, count);
+        print();
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
 
     }
 
-    public void cleanup() {
+    private void print() {
         System.out.println("---final counts---");
         List<String> keys = new ArrayList<String>();
         keys.addAll(this.counts.keySet());
