@@ -13,6 +13,7 @@
         <module>concurrent</module>
         <module>GenerateClass</module>
         <module>storm</module>
+        <module>jedis-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>
