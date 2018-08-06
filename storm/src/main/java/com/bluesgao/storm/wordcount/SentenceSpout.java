@@ -1,5 +1,6 @@
 package com.bluesgao.storm.wordcount;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -15,6 +16,7 @@ import java.util.Map;
  * Author: gaoxin11
  * Date: 2018/7/18 11:07
  **/
+@Slf4j
 public class SentenceSpout extends BaseRichSpout {
 
     private SpoutOutputCollector collector;
@@ -26,7 +28,7 @@ public class SentenceSpout extends BaseRichSpout {
     }
 
     public void nextTuple() {
-        System.out.println("SentenceSpout nextTuple:发射数据："+ sentences[index]);
+        log.info("发射数据："+ sentences[index]);
         this.collector.emit(new Values(sentences[index]));
         index++;
         if (index >= sentences.length) {
@@ -39,7 +41,19 @@ public class SentenceSpout extends BaseRichSpout {
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        System.out.println("SentenceSpout 定义格式...");
+        log.info("SentenceSpout 定义格式...");
         outputFieldsDeclarer.declare(new Fields("sentence"));
+    }
+
+    @Override
+    public void ack(Object msgId) {
+        log.info("ack.{}",msgId);
+        super.ack(msgId);
+    }
+
+    @Override
+    public void fail(Object msgId) {
+        log.info("fail.{}",msgId);
+        super.fail(msgId);
     }
 }

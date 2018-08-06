@@ -1,5 +1,6 @@
 package com.bluesgao.storm.wordcount;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -16,6 +17,7 @@ import java.util.Map;
  * Author: gaoxin11
  * Date: 2018/7/18 11:15
  **/
+@Slf4j
 public class SplitSentenceBolt extends BaseRichBolt {
     private OutputCollector collector;
 
@@ -24,8 +26,7 @@ public class SplitSentenceBolt extends BaseRichBolt {
     }
 
     public void execute(Tuple tuple) {
-        System.out.println("SplitSentenceBolt 接收的消息:" + tuple.toString());
-
+        log.info("接收数据:" + tuple.toString());
         String sentence = tuple.getStringByField("sentence");
         String[] words = sentence.split(" ");
         for (String word : words) {

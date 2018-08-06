@@ -14,6 +14,8 @@
         <module>GenerateClass</module>
         <module>storm</module>
         <module>jedis-demo</module>
+        <module>util-demo</module>
+        <module>utils</module>
     </modules>
     <packaging>pom</packaging>
 </project>
