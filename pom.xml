@@ -12,10 +12,10 @@
         <module>string</module>
         <module>concurrent</module>
         <module>GenerateClass</module>
-        <module>storm</module>
+        <module>storm-demo</module>
         <module>jedis-demo</module>
-        <module>util-demo</module>
         <module>utils</module>
+        <module>kafka-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>
