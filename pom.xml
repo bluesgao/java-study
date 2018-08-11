@@ -8,13 +8,13 @@
     <artifactId>java-study</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>aop</module>
-        <module>string</module>
-        <module>concurrent</module>
+        <module>aop-demo</module>
+        <module>string-demo</module>
+        <module>concurrent-demo</module>
         <module>GenerateClass</module>
         <module>storm-demo</module>
         <module>jedis-demo</module>
-        <module>utils</module>
+        <module>utils-demo</module>
         <module>kafka-demo</module>
     </modules>
     <packaging>pom</packaging>
