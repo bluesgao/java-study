@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <!--mysql 连接数据库jar 这里选择自己本地位置-->
-    <classPathEntry location="D:\repositories\maven\mysql\mysql-connector-java\5.1.45\mysql-connector-java-5.1.45.jar"/>
+    <classPathEntry location="/Users/bluesgao/.m2/repository/mysql/mysql-connector-java/5.1.37/mysql-connector-java-5.1.37.jar"/>
 
     <!--
     context:生成一组对象的环境
@@ -27,9 +27,9 @@
 
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://172.25.28.8:3306/crowdfunding_forward?createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;useUnicode=true"
-                        userId="jr_crowd"
-                        password="q1w2e3r4">
+                        connectionURL="jdbc:mysql://47.97.205.190:3306/test?createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;useUnicode=true"
+                        userId="dev"
+                        password="gx123456">
         </jdbcConnection>
 
         <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
