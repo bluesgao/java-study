@@ -17,6 +17,7 @@
         <module>utils-demo</module>
         <module>kafka-demo</module>
         <module>ssm-demo</module>
+        <module>oom-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>
