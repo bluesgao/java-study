@@ -75,6 +75,7 @@ public class CircularQueue<E> {
     /**
      * 入队
      * 循环队列入队不受限制，入队比出队快时，存在数据覆盖问题
+     *
      * @param e
      * @return
      */
@@ -108,15 +109,36 @@ public class CircularQueue<E> {
 
 
     public static void main(String[] args) {
-        CircularQueue<String> circularQueue = new CircularQueue<String>();
+        final CircularQueue<String> circularQueue = new CircularQueue<String>();
 
-        for (int i = 0; i < 20; i++) {
-            circularQueue.enqueue("test-" + i);
-        }
+        new Thread(new Runnable() {
+            public void run() {
+                for (int i = 0; i < 32; i++) {
+                    boolean res = circularQueue.enqueue("test-" + i);
+                    System.out.println("入队:" + Thread.currentThread().getName() + ":" + i + ":" + "test-" + i);
+                    try {
+                        Thread.sleep(500L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
 
-        for (int i = 0; i < 10; i++) {
-            circularQueue.dequeue();
-        }
+
+        new Thread(new Runnable() {
+            public void run() {
+                for (int i = 0; i < 40; i++) {
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("出队:" + Thread.currentThread().getName() + ":" + i + ":" + circularQueue.dequeue());
+                }
+            }
+        }).start();
+
 
         System.out.println(circularQueue);
 
