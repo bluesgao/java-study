@@ -18,6 +18,8 @@
         <module>kafka-demo</module>
         <module>ssm-demo</module>
         <module>oom-demo</module>
+        <module>algorithm-demo</module>
+        <module>data-structure-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>
