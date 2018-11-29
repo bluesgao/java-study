@@ -1,5 +1,7 @@
 package com.bluesgao.datastructure;
 
+import java.util.Random;
+
 /**
  * 循环队列
  */
@@ -8,7 +10,7 @@ public class CircularQueue<E> {
     /**
      * 默认容量
      */
-    private static final int DEFAULT_CAPACITY = 8;
+    private static final int DEFAULT_CAPACITY = 16;
 
     /**
      * 容量
@@ -117,7 +119,7 @@ public class CircularQueue<E> {
                     boolean res = circularQueue.enqueue("test-" + i);
                     System.out.println("入队:" + Thread.currentThread().getName() + ":" + i + ":" + "test-" + i);
                     try {
-                        Thread.sleep(500L);
+                        Thread.sleep(new Random().nextInt(200));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -130,7 +132,7 @@ public class CircularQueue<E> {
             public void run() {
                 for (int i = 0; i < 40; i++) {
                     try {
-                        Thread.sleep(1000L);
+                        Thread.sleep(new Random().nextInt(200));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -138,9 +140,6 @@ public class CircularQueue<E> {
                 }
             }
         }).start();
-
-
         System.out.println(circularQueue);
-
     }
 }
