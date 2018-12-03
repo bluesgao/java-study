@@ -20,7 +20,7 @@ public class DemoTask implements Runnable {
     // pipeline大小
     private static final int batchSize = 10;
     // 每个任务处理命令数
-    private static final int cmdCount = 100;
+    private static final int cmdCount = 1000;
 
     public DemoTask(CountDownLatch latch, boolean usePipeline) {
         this.latch = latch;
@@ -47,13 +47,17 @@ public class DemoTask implements Runnable {
         }
     }
 
+    /**
+     * 不使用pipeline的批量操作
+     * @param jedis
+     */
     private void runWithNonPipeline(Jedis jedis) {
         try {
             for (int i = 0; i < cmdCount; i++) {
                 String key = key(i);
                 String value = UUID.randomUUID().toString();
                 jedis.set(key, value);
-                log.info("Task[{}]-key[{}]-value[{}]", Thread.currentThread().getName(), key, value);
+                log.info("normal-Task[{}]-key[{}]-value[{}]", Thread.currentThread().getName(), key, value);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,17 +68,29 @@ public class DemoTask implements Runnable {
         }
     }
 
+    /**
+     * 使用pipeline的批量操作
+     * @param jedis
+     */
     private void runWithPipeline(Jedis jedis) {
+        int j = 0;
+
         try {
             Pipeline pipeline = jedis.pipelined();
             for (int i = 0; i < cmdCount; i++) {
                 String key = key(i);
                 String value = UUID.randomUUID().toString();
                 pipeline.set(key, value);
-                Response<String> response = pipeline.get(key);
-                log.info("pipeline-Task[{}]-key[{}]-value[{}] ", Thread.currentThread().getName(), key, JSON.toJSON(response));
+                
+                //20条命令提交一次，防止一次提交太多命令
+                if (i%20 == 0){
+                    pipeline.sync();
+                    log.info("pipeline-Task[{}]-flush-[{}] ", Thread.currentThread().getName(), ++j);
+                }
             }
-            //pipeline.sync();
+            //flush output stream 提交tcp sendbuffer中的命令数据到server端
+            pipeline.sync();
+            log.info("pipeline-Task[{}]-flush ", Thread.currentThread().getName());
         } catch (
                 Exception e) {
             e.printStackTrace();
