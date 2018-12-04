@@ -1,12 +1,10 @@
 package com.bluesgao.redis;
 
-import com.alibaba.fastjson.JSON;
 import com.bluesgao.redis.demo.RedisUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
-import redis.clients.jedis.Response;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -49,6 +47,7 @@ public class DemoTask implements Runnable {
 
     /**
      * 不使用pipeline的批量操作
+     *
      * @param jedis
      */
     private void runWithNonPipeline(Jedis jedis) {
@@ -70,6 +69,7 @@ public class DemoTask implements Runnable {
 
     /**
      * 使用pipeline的批量操作
+     *
      * @param jedis
      */
     private void runWithPipeline(Jedis jedis) {
@@ -81,9 +81,9 @@ public class DemoTask implements Runnable {
                 String key = key(i);
                 String value = UUID.randomUUID().toString();
                 pipeline.set(key, value);
-                
+
                 //20条命令提交一次，防止一次提交太多命令
-                if (i%20 == 0){
+                if (i % 20 == 0) {
                     pipeline.sync();
                     log.info("pipeline-Task[{}]-flush-[{}] ", Thread.currentThread().getName(), ++j);
                 }
