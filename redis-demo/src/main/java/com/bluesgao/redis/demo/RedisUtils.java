@@ -72,4 +72,10 @@ public class RedisUtils {
         }
         return jedisPool.getResource();
     }
+
+    public static void freeJedeisClient(Jedis client){
+        if (client != null){
+            client.close();
+        }
+    }
 }
