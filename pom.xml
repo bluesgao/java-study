@@ -16,11 +16,13 @@
         <module>utils-demo</module>
         <module>kafka-demo</module>
         <module>ssm-demo</module>
-        <module>oom-demo</module>
         <module>algorithm-demo</module>
         <module>data-structure-demo</module>
         <module>redis-demo</module>
         <module>agent-demo</module>
+        <module>jvm-demo</module>
+        <module>rx-demo</module>
+        <module>kilim-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>

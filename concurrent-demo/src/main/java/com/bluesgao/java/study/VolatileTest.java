@@ -1,5 +1,6 @@
 package com.bluesgao.java.study;
 
+import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *      b,假设线程2在线程1读操作之后，写操作之前，读取了volatile变量的值，此时由于线程1对volatile变量的写操作还未提交到主内存，也就是说线程2此时读取的是线程1修改前的值，此时volatile变量的值就与预期不一样。
  *      c,原因在于线程1的读操作和写操作不是原子性。
  *      d,解决方案:保证读操作与写操作的原子性。使用synchronized、lock、AtomicInteger
- * 4，volatile内存语义：1，可见性（缓存一致性）；2，禁止指令重排（内存屏障）
+ * 4，volatile内存语义：1，可见性（缓存一致性）；2，禁止指令重排（内存屏障）保证有序性。
  *
  */
 public class VolatileTest {

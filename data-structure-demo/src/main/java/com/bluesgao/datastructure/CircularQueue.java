@@ -112,7 +112,6 @@ public class CircularQueue<E> {
 
     public static void main(String[] args) {
         final CircularQueue<String> circularQueue = new CircularQueue<String>();
-
         new Thread(new Runnable() {
             public void run() {
                 for (int i = 0; i < 32; i++) {
