@@ -23,7 +23,7 @@ public class UserController {
      * @return
      */
     @ApiOperation(value = "获取用户详细信息", notes = "根据url的id来获取用户详细信息")
-    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer", paramType = "path")
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long", paramType = "path")
     @RequestMapping(value = "user/{id}", method = RequestMethod.GET)
     public ResponseEntity<Result> getUserById(@PathVariable(value = "id") Integer id) {
         Result r = null;
