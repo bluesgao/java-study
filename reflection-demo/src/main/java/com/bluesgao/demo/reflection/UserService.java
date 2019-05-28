@@ -1,4 +1,5 @@
 package com.bluesgao.demo.reflection;
 
-public class UserService {
+public interface UserService {
+    boolean createUserInfo(User user);
 }

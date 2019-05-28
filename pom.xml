@@ -24,6 +24,8 @@
         <module>rx-demo</module>
         <module>kilim-demo</module>
         <module>thread-demo</module>
+        <module>reflection-demo</module>
+        <module>performance-optimize</module>
     </modules>
     <packaging>pom</packaging>
 </project>
