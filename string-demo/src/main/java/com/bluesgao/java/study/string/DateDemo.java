@@ -38,5 +38,21 @@ public class DateDemo {
 
 
 
+
+        Date startDate = new Date();
+        try {
+            Thread.sleep(2340);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Date endDate = new Date();
+        Long diff = endDate.getTime() -startDate.getTime();
+
+        System.out.println("diff:"+diff);
+
+        Integer expire = (int)Math.ceil(1.0*diff/1000);
+        System.out.println("expire:"+expire);
+
+
     }
 }

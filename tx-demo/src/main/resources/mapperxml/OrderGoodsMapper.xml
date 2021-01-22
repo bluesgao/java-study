@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bluesgao.tx.demo.mapper.OrderGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.bluesgao.tx.demo.entity.OrderGoods">
+    <!--@mbg.generated-->
+    <!--@Table t_order_goods-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="goods_no" jdbcType="VARCHAR" property="goodsNo" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="goods_number" jdbcType="INTEGER" property="goodsNumber" />
+    <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
+    <result column="goods_img" jdbcType="VARCHAR" property="goodsImg" />
+    <result column="goods_desc" jdbcType="VARCHAR" property="goodsDesc" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_no, goods_no, merchant_id, merchant_name, goods_number, goods_price, goods_img, 
+    goods_desc, goods_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_goods
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from t_order_goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.OrderGoods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_order_goods (order_no, goods_no, merchant_id, 
+      merchant_name, goods_number, goods_price, 
+      goods_img, goods_desc, goods_name
+      )
+    values (#{orderNo,jdbcType=VARCHAR}, #{goodsNo,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR}, 
+      #{merchantName,jdbcType=VARCHAR}, #{goodsNumber,jdbcType=INTEGER}, #{goodsPrice,jdbcType=DECIMAL}, 
+      #{goodsImg,jdbcType=VARCHAR}, #{goodsDesc,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.OrderGoods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_order_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="goodsNo != null">
+        goods_no,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="merchantName != null">
+        merchant_name,
+      </if>
+      <if test="goodsNumber != null">
+        goods_number,
+      </if>
+      <if test="goodsPrice != null">
+        goods_price,
+      </if>
+      <if test="goodsImg != null">
+        goods_img,
+      </if>
+      <if test="goodsDesc != null">
+        goods_desc,
+      </if>
+      <if test="goodsName != null">
+        goods_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNo != null">
+        #{goodsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNumber != null">
+        #{goodsNumber,jdbcType=INTEGER},
+      </if>
+      <if test="goodsPrice != null">
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsImg != null">
+        #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null">
+        #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bluesgao.tx.demo.entity.OrderGoods">
+    <!--@mbg.generated-->
+    update t_order_goods
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNo != null">
+        goods_no = #{goodsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNumber != null">
+        goods_number = #{goodsNumber,jdbcType=INTEGER},
+      </if>
+      <if test="goodsPrice != null">
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsImg != null">
+        goods_img = #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null">
+        goods_desc = #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null">
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bluesgao.tx.demo.entity.OrderGoods">
+    <!--@mbg.generated-->
+    update t_order_goods
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      goods_no = #{goodsNo,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=VARCHAR},
+      merchant_name = #{merchantName,jdbcType=VARCHAR},
+      goods_number = #{goodsNumber,jdbcType=INTEGER},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      goods_img = #{goodsImg,jdbcType=VARCHAR},
+      goods_desc = #{goodsDesc,jdbcType=VARCHAR},
+      goods_name = #{goodsName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update t_order_goods
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="order_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.orderNo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="goods_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.goodsNo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="merchant_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.merchantId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="merchant_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.merchantName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="goods_number = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.goodsNumber,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="goods_price = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.goodsPrice,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="goods_img = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.goodsImg,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="goods_desc = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.goodsDesc,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="goods_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.goodsName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update t_order_goods
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="order_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.orderNo != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.orderNo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="goods_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.goodsNo != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.goodsNo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="merchant_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.merchantId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.merchantId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="merchant_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.merchantName != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.merchantName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="goods_number = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.goodsNumber != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.goodsNumber,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="goods_price = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.goodsPrice != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.goodsPrice,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="goods_img = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.goodsImg != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.goodsImg,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="goods_desc = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.goodsDesc != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.goodsDesc,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="goods_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.goodsName != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.goodsName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_order_goods
+    (order_no, goods_no, merchant_id, merchant_name, goods_number, goods_price, goods_img, 
+      goods_desc, goods_name)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.orderNo,jdbcType=VARCHAR}, #{item.goodsNo,jdbcType=VARCHAR}, #{item.merchantId,jdbcType=VARCHAR}, 
+        #{item.merchantName,jdbcType=VARCHAR}, #{item.goodsNumber,jdbcType=INTEGER}, #{item.goodsPrice,jdbcType=DECIMAL}, 
+        #{item.goodsImg,jdbcType=VARCHAR}, #{item.goodsDesc,jdbcType=VARCHAR}, #{item.goodsName,jdbcType=VARCHAR}
+        )
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.OrderGoods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_order_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      order_no,
+      goods_no,
+      merchant_id,
+      merchant_name,
+      goods_number,
+      goods_price,
+      goods_img,
+      goods_desc,
+      goods_name,
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      #{orderNo,jdbcType=VARCHAR},
+      #{goodsNo,jdbcType=VARCHAR},
+      #{merchantId,jdbcType=VARCHAR},
+      #{merchantName,jdbcType=VARCHAR},
+      #{goodsNumber,jdbcType=INTEGER},
+      #{goodsPrice,jdbcType=DECIMAL},
+      #{goodsImg,jdbcType=VARCHAR},
+      #{goodsDesc,jdbcType=VARCHAR},
+      #{goodsName,jdbcType=VARCHAR},
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      goods_no = #{goodsNo,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=VARCHAR},
+      merchant_name = #{merchantName,jdbcType=VARCHAR},
+      goods_number = #{goodsNumber,jdbcType=INTEGER},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      goods_img = #{goodsImg,jdbcType=VARCHAR},
+      goods_desc = #{goodsDesc,jdbcType=VARCHAR},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.OrderGoods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_order_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="goodsNo != null">
+        goods_no,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="merchantName != null">
+        merchant_name,
+      </if>
+      <if test="goodsNumber != null">
+        goods_number,
+      </if>
+      <if test="goodsPrice != null">
+        goods_price,
+      </if>
+      <if test="goodsImg != null">
+        goods_img,
+      </if>
+      <if test="goodsDesc != null">
+        goods_desc,
+      </if>
+      <if test="goodsName != null">
+        goods_name,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNo != null">
+        #{goodsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNumber != null">
+        #{goodsNumber,jdbcType=INTEGER},
+      </if>
+      <if test="goodsPrice != null">
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsImg != null">
+        #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null">
+        #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNo != null">
+        goods_no = #{goodsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNumber != null">
+        goods_number = #{goodsNumber,jdbcType=INTEGER},
+      </if>
+      <if test="goodsPrice != null">
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsImg != null">
+        goods_img = #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null">
+        goods_desc = #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null">
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

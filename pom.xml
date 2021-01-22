@@ -7,6 +7,10 @@
     <groupId>com.bluesgao</groupId>
     <artifactId>java-study</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <modules>
         <module>aop-demo</module>
         <module>string-demo</module>
@@ -26,6 +30,12 @@
         <module>thread-demo</module>
         <module>reflection-demo</module>
         <module>performance-optimize</module>
+        <module>nio-demo</module>
+        <module>base-demo</module>
+        <module>hbase-demo</module>
+        <module>dynamic-datasource-demo</module>
+        <module>spi-demo</module>
+        <module>tx-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>
