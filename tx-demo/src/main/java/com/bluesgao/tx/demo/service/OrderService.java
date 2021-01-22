@@ -2,15 +2,14 @@ package com.bluesgao.tx.demo.service;
 
 import java.util.List;
 import com.bluesgao.tx.demo.entity.Order;
-    /**
-*
-*@ClassName：OrderService
-*@Description：
-*@Author：bluesgao
-*@Date：2021/1/22 11:16
-*
-**/
-public interface OrderService{
+
+/**
+ * @ClassName：OrderService
+ * @Description：
+ * @Author：bluesgao
+ * @Date：2021/1/22 11:16
+ **/
+public interface OrderService {
 
 
     int deleteByPrimaryKey(Long id);
@@ -36,3 +35,4 @@ public interface OrderService{
     int batchInsert(List<Order> list);
 
 }
+

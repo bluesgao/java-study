@@ -5,18 +5,19 @@
     <!--@mbg.generated-->
     <!--@Table t_order-->
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="order_sn" jdbcType="BIGINT" property="orderSn" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="order_price" jdbcType="DECIMAL" property="orderPrice" />
     <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
     <result column="c_time" jdbcType="TIMESTAMP" property="cTime" />
     <result column="m_time" jdbcType="TIMESTAMP" property="mTime" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, order_sn, order_price, order_status, order_time, c_time, m_time, user_id, user_name
+    id, order_no, order_price, order_status, user_id, user_name, order_time, c_time, 
+    m_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -32,25 +33,31 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.Order" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into t_order (order_sn, order_price, order_status, 
-      order_time, c_time, m_time, 
-      user_id, user_name)
-    values (#{orderSn,jdbcType=BIGINT}, #{orderPrice,jdbcType=DECIMAL}, #{orderStatus,jdbcType=INTEGER}, 
-      #{orderTime,jdbcType=TIMESTAMP}, #{cTime,jdbcType=TIMESTAMP}, #{mTime,jdbcType=TIMESTAMP}, 
-      #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR})
+    insert into t_order (order_no, order_price, order_status, 
+      user_id, user_name, order_time, 
+      c_time, m_time)
+    values (#{orderNo,jdbcType=VARCHAR}, #{orderPrice,jdbcType=DECIMAL}, #{orderStatus,jdbcType=INTEGER}, 
+      #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
+      #{cTime,jdbcType=TIMESTAMP}, #{mTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.Order" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into t_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="orderSn != null">
-        order_sn,
+      <if test="orderNo != null">
+        order_no,
       </if>
       <if test="orderPrice != null">
         order_price,
       </if>
       <if test="orderStatus != null">
         order_status,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
       </if>
       <if test="orderTime != null">
         order_time,
@@ -61,22 +68,22 @@
       <if test="mTime != null">
         m_time,
       </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="orderSn != null">
-        #{orderSn,jdbcType=BIGINT},
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="orderPrice != null">
         #{orderPrice,jdbcType=DECIMAL},
       </if>
       <if test="orderStatus != null">
         #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
       </if>
       <if test="orderTime != null">
         #{orderTime,jdbcType=TIMESTAMP},
@@ -87,26 +94,26 @@
       <if test="mTime != null">
         #{mTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.bluesgao.tx.demo.entity.Order">
     <!--@mbg.generated-->
     update t_order
     <set>
-      <if test="orderSn != null">
-        order_sn = #{orderSn,jdbcType=BIGINT},
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="orderPrice != null">
         order_price = #{orderPrice,jdbcType=DECIMAL},
       </if>
       <if test="orderStatus != null">
         order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
       </if>
       <if test="orderTime != null">
         order_time = #{orderTime,jdbcType=TIMESTAMP},
@@ -117,35 +124,29 @@
       <if test="mTime != null">
         m_time = #{mTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bluesgao.tx.demo.entity.Order">
     <!--@mbg.generated-->
     update t_order
-    set order_sn = #{orderSn,jdbcType=BIGINT},
+    set order_no = #{orderNo,jdbcType=VARCHAR},
       order_price = #{orderPrice,jdbcType=DECIMAL},
       order_status = #{orderStatus,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
       order_time = #{orderTime,jdbcType=TIMESTAMP},
       c_time = #{cTime,jdbcType=TIMESTAMP},
-      m_time = #{mTime,jdbcType=TIMESTAMP},
-      user_id = #{userId,jdbcType=BIGINT},
-      user_name = #{userName,jdbcType=VARCHAR}
+      m_time = #{mTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateBatch" parameterType="java.util.List">
     <!--@mbg.generated-->
     update t_order
     <trim prefix="set" suffixOverrides=",">
-      <trim prefix="order_sn = case" suffix="end,">
+      <trim prefix="order_no = case" suffix="end,">
         <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=BIGINT} then #{item.orderSn,jdbcType=BIGINT}
+          when id = #{item.id,jdbcType=BIGINT} then #{item.orderNo,jdbcType=VARCHAR}
         </foreach>
       </trim>
       <trim prefix="order_price = case" suffix="end,">
@@ -156,6 +157,16 @@
       <trim prefix="order_status = case" suffix="end,">
         <foreach collection="list" index="index" item="item">
           when id = #{item.id,jdbcType=BIGINT} then #{item.orderStatus,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.userId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="user_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.userName,jdbcType=VARCHAR}
         </foreach>
       </trim>
       <trim prefix="order_time = case" suffix="end,">
@@ -173,16 +184,6 @@
           when id = #{item.id,jdbcType=BIGINT} then #{item.mTime,jdbcType=TIMESTAMP}
         </foreach>
       </trim>
-      <trim prefix="user_id = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=BIGINT} then #{item.userId,jdbcType=BIGINT}
-        </foreach>
-      </trim>
-      <trim prefix="user_name = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when id = #{item.id,jdbcType=BIGINT} then #{item.userName,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
     </trim>
     where id in
     <foreach close=")" collection="list" item="item" open="(" separator=", ">
@@ -193,10 +194,10 @@
     <!--@mbg.generated-->
     update t_order
     <trim prefix="set" suffixOverrides=",">
-      <trim prefix="order_sn = case" suffix="end,">
+      <trim prefix="order_no = case" suffix="end,">
         <foreach collection="list" index="index" item="item">
-          <if test="item.orderSn != null">
-            when id = #{item.id,jdbcType=BIGINT} then #{item.orderSn,jdbcType=BIGINT}
+          <if test="item.orderNo != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.orderNo,jdbcType=VARCHAR}
           </if>
         </foreach>
       </trim>
@@ -211,6 +212,20 @@
         <foreach collection="list" index="index" item="item">
           <if test="item.orderStatus != null">
             when id = #{item.id,jdbcType=BIGINT} then #{item.orderStatus,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.userId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.userId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="user_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.userName != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.userName,jdbcType=VARCHAR}
           </if>
         </foreach>
       </trim>
@@ -235,20 +250,6 @@
           </if>
         </foreach>
       </trim>
-      <trim prefix="user_id = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.userId != null">
-            when id = #{item.id,jdbcType=BIGINT} then #{item.userId,jdbcType=BIGINT}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="user_name = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.userName != null">
-            when id = #{item.id,jdbcType=BIGINT} then #{item.userName,jdbcType=VARCHAR}
-          </if>
-        </foreach>
-      </trim>
     </trim>
     where id in
     <foreach close=")" collection="list" item="item" open="(" separator=", ">
@@ -258,13 +259,13 @@
   <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into t_order
-    (order_sn, order_price, order_status, order_time, c_time, m_time, user_id, user_name
+    (order_no, order_price, order_status, user_id, user_name, order_time, c_time, m_time
       )
     values
     <foreach collection="list" item="item" separator=",">
-      (#{item.orderSn,jdbcType=BIGINT}, #{item.orderPrice,jdbcType=DECIMAL}, #{item.orderStatus,jdbcType=INTEGER}, 
-        #{item.orderTime,jdbcType=TIMESTAMP}, #{item.cTime,jdbcType=TIMESTAMP}, #{item.mTime,jdbcType=TIMESTAMP}, 
-        #{item.userId,jdbcType=BIGINT}, #{item.userName,jdbcType=VARCHAR})
+      (#{item.orderNo,jdbcType=VARCHAR}, #{item.orderPrice,jdbcType=DECIMAL}, #{item.orderStatus,jdbcType=INTEGER}, 
+        #{item.userId,jdbcType=VARCHAR}, #{item.userName,jdbcType=VARCHAR}, #{item.orderTime,jdbcType=TIMESTAMP}, 
+        #{item.cTime,jdbcType=TIMESTAMP}, #{item.mTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
   <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.Order" useGeneratedKeys="true">
@@ -274,42 +275,42 @@
       <if test="id != null">
         id,
       </if>
-      order_sn,
+      order_no,
       order_price,
       order_status,
+      user_id,
+      user_name,
       order_time,
       c_time,
       m_time,
-      user_id,
-      user_name,
     </trim>
     values
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      #{orderSn,jdbcType=BIGINT},
+      #{orderNo,jdbcType=VARCHAR},
       #{orderPrice,jdbcType=DECIMAL},
       #{orderStatus,jdbcType=INTEGER},
+      #{userId,jdbcType=VARCHAR},
+      #{userName,jdbcType=VARCHAR},
       #{orderTime,jdbcType=TIMESTAMP},
       #{cTime,jdbcType=TIMESTAMP},
       #{mTime,jdbcType=TIMESTAMP},
-      #{userId,jdbcType=BIGINT},
-      #{userName,jdbcType=VARCHAR},
     </trim>
     on duplicate key update 
     <trim suffixOverrides=",">
       <if test="id != null">
         id = #{id,jdbcType=BIGINT},
       </if>
-      order_sn = #{orderSn,jdbcType=BIGINT},
+      order_no = #{orderNo,jdbcType=VARCHAR},
       order_price = #{orderPrice,jdbcType=DECIMAL},
       order_status = #{orderStatus,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
       order_time = #{orderTime,jdbcType=TIMESTAMP},
       c_time = #{cTime,jdbcType=TIMESTAMP},
       m_time = #{mTime,jdbcType=TIMESTAMP},
-      user_id = #{userId,jdbcType=BIGINT},
-      user_name = #{userName,jdbcType=VARCHAR},
     </trim>
   </insert>
   <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.bluesgao.tx.demo.entity.Order" useGeneratedKeys="true">
@@ -319,14 +320,20 @@
       <if test="id != null">
         id,
       </if>
-      <if test="orderSn != null">
-        order_sn,
+      <if test="orderNo != null">
+        order_no,
       </if>
       <if test="orderPrice != null">
         order_price,
       </if>
       <if test="orderStatus != null">
         order_status,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
       </if>
       <if test="orderTime != null">
         order_time,
@@ -337,26 +344,26 @@
       <if test="mTime != null">
         m_time,
       </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
     </trim>
     values
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="orderSn != null">
-        #{orderSn,jdbcType=BIGINT},
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="orderPrice != null">
         #{orderPrice,jdbcType=DECIMAL},
       </if>
       <if test="orderStatus != null">
         #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
       </if>
       <if test="orderTime != null">
         #{orderTime,jdbcType=TIMESTAMP},
@@ -367,26 +374,26 @@
       <if test="mTime != null">
         #{mTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
     </trim>
     on duplicate key update 
     <trim suffixOverrides=",">
       <if test="id != null">
         id = #{id,jdbcType=BIGINT},
       </if>
-      <if test="orderSn != null">
-        order_sn = #{orderSn,jdbcType=BIGINT},
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="orderPrice != null">
         order_price = #{orderPrice,jdbcType=DECIMAL},
       </if>
       <if test="orderStatus != null">
         order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
       </if>
       <if test="orderTime != null">
         order_time = #{orderTime,jdbcType=TIMESTAMP},
@@ -396,12 +403,6 @@
       </if>
       <if test="mTime != null">
         m_time = #{mTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

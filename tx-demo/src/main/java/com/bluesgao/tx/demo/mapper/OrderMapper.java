@@ -5,13 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 /**
-*
-*@ClassName：OrderMapper
-*@Description：
-*@Author：bluesgao
-*@Date：2021/1/22 11:16
-*
-**/
+ * @ClassName：OrderMapper
+ * @Description：
+ * @Author：bluesgao
+ * @Date：2021/1/22 11:26
+ **/
 public interface OrderMapper {
     int deleteByPrimaryKey(Long id);
 
