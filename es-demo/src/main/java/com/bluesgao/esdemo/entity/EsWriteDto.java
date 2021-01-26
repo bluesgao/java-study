@@ -1,5 +1,6 @@
 package com.bluesgao.esdemo.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Map;
@@ -8,7 +9,8 @@ import java.util.Map;
  * ES存储对象
  */
 @Data
-public class EsSaveDto {
+@Builder
+public class EsWriteDto {
     /**
      * 需要存入的数据
      */
@@ -30,7 +32,7 @@ public class EsSaveDto {
     /**
      * 是否是嵌套模式
      */
-    private Boolean isNested;
+    private boolean nested;
 
     /**
      * 嵌套字段的key
@@ -45,11 +47,6 @@ public class EsSaveDto {
      * 关联的业务值
      */
     private String relatedKeyValue;
-
-    /**
-     * 非嵌套非主表必传，用于存储平铺子表的offset-key
-     */
-    private String offsetKey;
 
     /**
      * 保证幂等性的key
@@ -69,5 +66,5 @@ public class EsSaveDto {
 
     private long hashCode;
 
-    private Boolean refresh;
+    private boolean refresh;
 }

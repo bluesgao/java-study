@@ -1,20 +1,14 @@
 package com.bluesgao.esdemo.controller.admin;
 
-import com.bluesgao.esdemo.entity.EsSaveDto;
-import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.action.update.UpdateResponse;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.VersionType;
-import org.elasticsearch.script.Script;
-import org.elasticsearch.script.ScriptType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.bluesgao.esdemo.entity.EsWriteDto;
+import com.bluesgao.esdemo.service.EsWriteService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName：NestedDocController
@@ -26,32 +20,22 @@ import java.io.IOException;
 @RequestMapping("/nested")
 public class NestedDocController {
     @Resource
-    private RestHighLevelClient client;
+    private EsWriteService esWriteService;
 
-    @PostMapping("/save/")
-    public boolean save(@RequestBody EsSaveDto esSaveDto) {
-        UpdateRequest request = new UpdateRequest(esSaveDto.getIndexName(), esSaveDto.getDocIdValue());
+    @GetMapping("/save")
+    public boolean save() {
+        EsWriteDto esWriteDto = EsWriteDto.builder().indexName("test_order")
+                .docIdKey("id")
+                .idempotentKey("timestamp")
+                .build();
+        Map<String, Object> data = new HashMap<>(8);
+        data.put("id", 2);
+        data.put("timestamp", 1611658993L);
+        data.put("userName", "gx66");
+        data.put("orderStatus", 66);
+        esWriteDto.setData(data);
 
-        Script inline = new Script(ScriptType.INLINE, Script.DEFAULT_SCRIPT_LANG,
-                "ctx._source.field += params.count", esSaveDto.getData());
-        request.script(inline);
-        request.docAsUpsert(true);
-        request.doc(esSaveDto.getData());
-        request.version((Long) esSaveDto.getData().get("version"));
-        request.versionType(VersionType.EXTERNAL);
-
-
-        String code = "String offsetKey=params.offsetKey;if(null == ctx._source.get(offsetKey) || 'null'.equals(ctx._source.get(offsetKey)) || null == params.data.get(offsetKey) || Long.valueOf(ctx._source.get(offsetKey)) < params.data.get(offsetKey))"
-                + "{for(entry in params.data.entrySet()) {ctx._source[entry.getKey()] = entry.getValue()}} "
-                + "else{ctx.op='noop';}";
-
-        UpdateResponse response = null;
-        try {
-            response = client.update(request, RequestOptions.DEFAULT);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("upsert:" + response.getId());
+        esWriteService.save(esWriteDto);
         return true;
     }
 }
