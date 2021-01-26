@@ -70,8 +70,6 @@ public class IndexController {
         System.out.println(request.index()+"创建索引"+createIndexResponse.isAcknowledged());
     }
 
-
-
     @GetMapping("/{index}")
     public Object getIndex(@PathVariable String index) {
         try {

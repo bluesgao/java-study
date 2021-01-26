@@ -107,15 +107,15 @@ SELECT event_name,event_definition,interval_value,interval_field,status FROM inf
 DROP EVENT IF EXISTS 事件名;
 
 -- 开启事件
-alter event 事件名 on completion preserve enable; -- 开启定时任务
+alter code 事件名 on completion preserve enable; -- 开启定时任务
 
 -- 关闭事件
-alter event 事件名 on completion preserve disable; -- 关闭定时任务
+alter code 事件名 on completion preserve disable; -- 关闭定时任务
 
 -- 创建事件
-create event auto_gen_record_event on schedule every 3 second do call auto_gen_record(1);
+create code auto_gen_record_event on schedule every 3 second do call auto_gen_record(1);
 -- 参数解释
-create event second_event       -- 创建名为 second_event 的事件,注意此处没有括号
+create code second_event       -- 创建名为 second_event 的事件,注意此处没有括号
   on schedule every 1 second      -- 创建周期定时的规则，每秒钟执行一次
   on completion preserve disable  -- 创建后并不开始生效
 do call test_proce();           -- do call test_proce() 是该事件的操作内容，表示调用名为 test_proce() 的存储过程。
