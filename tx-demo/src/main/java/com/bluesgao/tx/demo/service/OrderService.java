@@ -12,13 +12,9 @@ import com.bluesgao.tx.demo.entity.Order;
 public interface OrderService {
 
 
-    int deleteByPrimaryKey(Long id);
 
     int insert(Order record);
 
-    int insertOrUpdate(Order record);
-
-    int insertOrUpdateSelective(Order record);
 
     int insertSelective(Order record);
 
@@ -26,9 +22,7 @@ public interface OrderService {
 
     int updateByPrimaryKeySelective(Order record);
 
-    int updateByPrimaryKey(Order record);
 
-    int updateBatch(List<Order> list);
 
     int updateBatchSelective(List<Order> list);
 
