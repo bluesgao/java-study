@@ -1,5 +1,6 @@
 package com.bluesgao.esdemo.service;
 
+import com.bluesgao.esdemo.common.CommonResult;
 import com.bluesgao.esdemo.entity.EsWriteDto;
 
 /**
@@ -9,5 +10,5 @@ import com.bluesgao.esdemo.entity.EsWriteDto;
  * @Date：2021/1/26 17:11
  **/
 public interface EsWriteService {
-    long save(EsWriteDto esWriteDto);
+    CommonResult save(EsWriteDto esWriteDto);
 }
