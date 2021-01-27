@@ -1,7 +1,8 @@
 package com.bluesgao.esdemo.service;
 
 import com.bluesgao.esdemo.common.CommonResult;
-import com.bluesgao.esdemo.entity.EsWriteDto;
+import com.bluesgao.esdemo.entity.EsCommonWriteDto;
+import com.bluesgao.esdemo.entity.EsNestedWriteDto;
 
 /**
  * @ClassName：EsOperateService
@@ -10,5 +11,6 @@ import com.bluesgao.esdemo.entity.EsWriteDto;
  * @Date：2021/1/26 17:11
  **/
 public interface EsWriteService {
-    CommonResult save(EsWriteDto esWriteDto);
+    CommonResult commonSave(EsCommonWriteDto esCommonWriteDto);
+    CommonResult nestedSave(EsNestedWriteDto esNestedWriteDto);
 }

@@ -2,7 +2,8 @@ package com.bluesgao.esdemo.controller.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.bluesgao.esdemo.common.CommonResult;
-import com.bluesgao.esdemo.entity.EsWriteDto;
+import com.bluesgao.esdemo.entity.EsCommonWriteDto;
+import com.bluesgao.esdemo.entity.EsNestedWriteDto;
 import com.bluesgao.esdemo.service.EsWriteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,22 +27,48 @@ public class NestedDocController {
     @Resource
     private EsWriteService esWriteService;
 
-    @GetMapping("/save")
-    public CommonResult save() {
-        EsWriteDto esWriteDto = EsWriteDto.builder().indexName("test_order")
-                .docIdKey("id")
-                .docIdValue("3")
-                .idempotentKey("timestamp")
-                .build();
+    @GetMapping("/commonSave")
+    public CommonResult commonSave() {
+        EsCommonWriteDto dto = EsCommonWriteDto.builder().build();
+        dto.setIndexName("test_order");
+        dto.setDocIdKey("id");
+        dto.setDocIdValue("3");
+        dto.setIdempotentKey("timestamp");
+        dto.setIdempotentKeyValue(1611658998L);
+
         Map<String, Object> data = new HashMap<>(8);
         data.put("id", 3);
-        data.put("timestamp", 1611658998L);
         data.put("userName", "gx333");
         data.put("orderStatus", 2);
         data.put("userId", "00003");
-        esWriteDto.setData(data);
+        dto.setData(data);
 
-        CommonResult result = esWriteService.save(esWriteDto);
+        CommonResult result = esWriteService.commonSave(dto);
+        log.info(JSON.toJSONString(result));
+        return result;
+    }
+
+    @GetMapping("/nestedSave")
+    public CommonResult nestedSave() {
+        EsNestedWriteDto dto = EsNestedWriteDto.builder().build();
+        dto.setIndexName("class_student");
+        dto.setDocIdKey("id");
+        dto.setDocIdValue("2");
+        dto.setIdempotentKey("updTime");
+        dto.setIdempotentKeyValue(1L);
+        dto.setNestedField("students");
+        dto.setNestedIdKey("id");
+        dto.setNestedIdKeyValue("2");
+
+        Map<String, Object> data = new HashMap<>(8);
+        data.put("id", "2");
+        data.put("name", "科比2");
+        data.put("sex", "男");
+        data.put("age", 33);
+        data.put("updTime", 1);
+        dto.setData(data);
+
+        CommonResult result = esWriteService.nestedSave(dto);
         log.info(JSON.toJSONString(result));
         return result;
     }
