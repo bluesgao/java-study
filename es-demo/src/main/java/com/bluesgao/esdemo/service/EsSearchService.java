@@ -1,8 +1,8 @@
 package com.bluesgao.esdemo.service;
 
 import com.bluesgao.esdemo.common.PageResult;
-import com.bluesgao.esdemo.entity.es.EsSearchDto;
-import com.bluesgao.esdemo.entity.es.SearchResultDto;
+import com.bluesgao.esdemo.entity.search.EsSearchDto;
+import com.bluesgao.esdemo.entity.search.SearchResultDto;
 
 import java.util.List;
 
@@ -14,5 +14,4 @@ import java.util.List;
  **/
 public interface EsSearchService {
     PageResult<List<SearchResultDto>> commonSearch(EsSearchDto param);
-
 }

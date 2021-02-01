@@ -6,44 +6,44 @@ import java.io.Serializable;
 /**
  * 数据获取处理结果
  */
-public class CommonResult implements Serializable {
-    private Boolean success;
+public class CommonResult<T> implements Serializable {
+    private String code;
     private String msg;
-    private Object data;
+    private T data;
 
     private CommonResult() {
     }
 
-    public CommonResult(Boolean success, String msg, Object data) {
-        this.success = success;
+    public CommonResult(String code, String msg, T data) {
+        this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public static CommonResult success(Object data) {
-        return new CommonResult(true, "", data);
+    public static <T> CommonResult success(String code, String msg, T data) {
+        return new CommonResult(code, msg, data);
     }
 
-    public static CommonResult fail(String msg) {
-        return new CommonResult(false, msg, null);
+    public static CommonResult fail(String code, String msg) {
+        return new CommonResult(code, msg, null);
     }
 
-    public Boolean getSuccess() {
-        return success;
+    public String getCode() {
+        return code;
     }
 
     public String getMsg() {
         return msg;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
     @Override
     public String toString() {
-        return "DataFetcherResult{" +
-                "success=" + success +
+        return "CommonResult{" +
+                "code='" + code + '\'' +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +
                 '}';

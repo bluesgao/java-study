@@ -1,4 +1,4 @@
-package com.bluesgao.esdemo.entity.es;
+package com.bluesgao.esdemo.entity.search;
 
 import lombok.Getter;
 

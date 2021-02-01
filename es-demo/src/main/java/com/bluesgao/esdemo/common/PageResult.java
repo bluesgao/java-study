@@ -25,6 +25,7 @@ public class PageResult<T> implements Serializable {
     }
 
     public static <T> PageResult fail(String code, String msg) {
+
         return new PageResult(code, msg, null, null);
     }
 

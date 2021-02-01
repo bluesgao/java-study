@@ -2,8 +2,8 @@ package com.bluesgao.esdemo.controller.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.bluesgao.esdemo.common.CommonResult;
-import com.bluesgao.esdemo.entity.EsCommonWriteDto;
-import com.bluesgao.esdemo.entity.EsNestedWriteDto;
+import com.bluesgao.esdemo.entity.write.EsCommonWriteDto;
+import com.bluesgao.esdemo.entity.write.EsNestedWriteDto;
 import com.bluesgao.esdemo.service.EsWriteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

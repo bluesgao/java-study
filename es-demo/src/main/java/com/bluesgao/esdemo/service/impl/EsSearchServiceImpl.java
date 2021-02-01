@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.bluesgao.esdemo.common.PageBean;
 import com.bluesgao.esdemo.common.PageResult;
 import com.bluesgao.esdemo.common.ResultCode;
-import com.bluesgao.esdemo.entity.es.EsSearchDto;
-import com.bluesgao.esdemo.entity.es.RangeDto;
-import com.bluesgao.esdemo.entity.es.SearchResultDto;
+import com.bluesgao.esdemo.entity.search.EsSearchDto;
+import com.bluesgao.esdemo.entity.search.RangeDto;
+import com.bluesgao.esdemo.entity.search.SearchResultDto;
 import com.bluesgao.esdemo.service.EsSearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -205,7 +205,7 @@ public class EsSearchServiceImpl implements EsSearchService {
             log.error("common search error:{}", e);
         }
         if (searchResponse == null) {
-            PageResult.fail(ResultCode.FAIL.getCode(), ResultCode.FAIL.getMessage() + "es search error");
+            PageResult.fail(ResultCode.FAIL.getCode(), ResultCode.FAIL.getMessage() + "search search error");
         }
 
         //处理搜索结果
@@ -228,7 +228,7 @@ public class EsSearchServiceImpl implements EsSearchService {
 
         //日志
         long duration = Duration.between(start, Instant.now()).toMillis();
-        log.info("EsSearchService.commonSearch param:{},total count：{}，return count：{},spent:{} ms,es time {} ms,time out:{},slow query:{}",
+        log.info("EsSearchService.commonSearch param:{},total count：{}，return count：{},spent:{} ms,search time {} ms,time out:{},slow query:{}",
                 JSON.toJSONString(param), hits.getTotalHits().value, dataList.size(), duration,
                 searchResponse.getTook().getMillis(), duration > 20000, duration > 2000);
 

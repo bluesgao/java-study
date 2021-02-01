@@ -1,4 +1,4 @@
-package com.bluesgao.esdemo.entity;
+package com.bluesgao.esdemo.entity.biz;
 
 /**
  * @ClassName：TextSearch

@@ -1,4 +1,4 @@
-package com.bluesgao.esdemo.entity;
+package com.bluesgao.esdemo.entity.biz;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

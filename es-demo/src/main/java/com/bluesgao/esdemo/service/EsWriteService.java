@@ -1,8 +1,8 @@
 package com.bluesgao.esdemo.service;
 
 import com.bluesgao.esdemo.common.CommonResult;
-import com.bluesgao.esdemo.entity.EsCommonWriteDto;
-import com.bluesgao.esdemo.entity.EsNestedWriteDto;
+import com.bluesgao.esdemo.entity.write.EsCommonWriteDto;
+import com.bluesgao.esdemo.entity.write.EsNestedWriteDto;
 
 /**
  * @ClassName：EsOperateService

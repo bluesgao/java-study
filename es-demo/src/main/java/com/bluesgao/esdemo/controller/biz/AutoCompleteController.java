@@ -1,6 +1,6 @@
 package com.bluesgao.esdemo.controller.biz;
 
-import com.bluesgao.esdemo.entity.TextSearch;
+import com.bluesgao.esdemo.entity.biz.TextSearch;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;

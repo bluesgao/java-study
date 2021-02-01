@@ -2,9 +2,10 @@ package com.bluesgao.esdemo.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bluesgao.esdemo.common.CommonResult;
-import com.bluesgao.esdemo.entity.EsBaseWriteDto;
-import com.bluesgao.esdemo.entity.EsCommonWriteDto;
-import com.bluesgao.esdemo.entity.EsNestedWriteDto;
+import com.bluesgao.esdemo.common.ResultCode;
+import com.bluesgao.esdemo.entity.write.EsBaseWriteDto;
+import com.bluesgao.esdemo.entity.write.EsCommonWriteDto;
+import com.bluesgao.esdemo.entity.write.EsNestedWriteDto;
 import com.bluesgao.esdemo.service.EsWriteService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteResponse;
@@ -37,12 +38,12 @@ public class EsWriteServiceImpl implements EsWriteService {
     private RestHighLevelClient client;
 
     @Override
-    public CommonResult commonSave(EsCommonWriteDto esCommonWriteDto) {
-        log.info("es commonSave dto:{}", JSON.toJSONString(esCommonWriteDto));
+    public CommonResult<Long> commonSave(EsCommonWriteDto esCommonWriteDto) {
+        log.info("search commonSave dto:{}", JSON.toJSONString(esCommonWriteDto));
         String commonErrMsg = commonCheck(esCommonWriteDto);
         if (!StringUtils.isEmpty(commonErrMsg)) {
             log.error("params error:{},esCommonWriteDto:{}", commonErrMsg, JSON.toJSONString(esCommonWriteDto));
-            return CommonResult.fail("公共参数错误:" + commonErrMsg);
+            return CommonResult.fail(ResultCode.PARAM_ERROR.getCode(), ResultCode.PARAM_ERROR.getMessage() + commonErrMsg);
         }
         //文档id
         String docId = getDocId(esCommonWriteDto);
@@ -85,16 +86,17 @@ public class EsWriteServiceImpl implements EsWriteService {
         //System.out.println("upsert:" + response.getId());
         count = response.getResult() == DocWriteResponse.Result.NOOP ? 0 : 1;
 
-        return CommonResult.success(count);
+        return CommonResult.success(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), count);
     }
 
     @Override
     public CommonResult nestedSave(EsNestedWriteDto esNestedWriteDto) {
-        log.info("es nestedSave dto:{}", JSON.toJSONString(esNestedWriteDto));
+        log.info("search nestedSave dto:{}", JSON.toJSONString(esNestedWriteDto));
         String errMsg = nestedCheck(esNestedWriteDto);
         if (!StringUtils.isEmpty(errMsg)) {
             log.error("params error:{},esNestedWriteDto:{}", errMsg, JSON.toJSONString(esNestedWriteDto));
-            return CommonResult.fail("嵌套参数错误:" + errMsg);
+            return CommonResult.fail(ResultCode.PARAM_ERROR.getCode(), ResultCode.PARAM_ERROR.getMessage() + errMsg);
+
         }
         //文档id
         String docId = getDocId(esNestedWriteDto);
@@ -136,7 +138,7 @@ public class EsWriteServiceImpl implements EsWriteService {
         }
         count = response.getResult() == DocWriteResponse.Result.NOOP ? 0 : 1;
 
-        return CommonResult.success(count);
+        return CommonResult.success(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), count);
     }
 
     private String getDocId(Object obj) {
