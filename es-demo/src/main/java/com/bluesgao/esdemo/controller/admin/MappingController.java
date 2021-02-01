@@ -27,6 +27,7 @@ public class MappingController {
 
     /**
      * 获取index的mapping信息
+     *
      * @param index
      * @return
      */

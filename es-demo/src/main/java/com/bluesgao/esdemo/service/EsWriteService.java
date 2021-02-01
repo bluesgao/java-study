@@ -12,5 +12,6 @@ import com.bluesgao.esdemo.entity.EsNestedWriteDto;
  **/
 public interface EsWriteService {
     CommonResult commonSave(EsCommonWriteDto esCommonWriteDto);
+
     CommonResult nestedSave(EsNestedWriteDto esNestedWriteDto);
 }

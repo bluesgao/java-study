@@ -37,6 +37,7 @@ public class IndexController {
 
     /**
      * 创建索引
+     *
      * @throws IOException
      */
     @PostMapping
@@ -67,7 +68,7 @@ public class IndexController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(request.index()+"创建索引"+createIndexResponse.isAcknowledged());
+        System.out.println(request.index() + "创建索引" + createIndexResponse.isAcknowledged());
     }
 
     @GetMapping("/{index}")
