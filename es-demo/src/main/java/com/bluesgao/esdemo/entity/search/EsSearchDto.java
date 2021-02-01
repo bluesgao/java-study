@@ -11,11 +11,11 @@ import java.util.Map;
 @Getter
 public class EsSearchDto implements Serializable {
     private static final long serialVersionUID = -5433935615008981178L;
-    private String idxName;//索引名称
+    private String indexName;//索引名称
 
-    private Integer pageNo;//页码
+    private int pageNo = 1;//页码
 
-    private Integer pageSize;//每页数量
+    private int pageSize = 10;//每页数量
 
     private Map<String, String> matchMap;
 
@@ -35,8 +35,8 @@ public class EsSearchDto implements Serializable {
 
     private String[] ids;//按照id查询
 
-    public EsSearchDto(String idxName, Integer pageNo, Integer pageSize) {
-        this.idxName = idxName;
+    public EsSearchDto(String indexName, Integer pageNo, Integer pageSize) {
+        this.indexName = indexName;
         this.pageNo = pageNo;
         this.pageSize = pageSize;
     }

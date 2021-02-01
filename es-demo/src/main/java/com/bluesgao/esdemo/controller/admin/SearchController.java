@@ -1,5 +1,9 @@
 package com.bluesgao.esdemo.controller.admin;
 
+import com.bluesgao.esdemo.common.PageResult;
+import com.bluesgao.esdemo.entity.search.EsSearchDto;
+import com.bluesgao.esdemo.entity.search.SearchResultDto;
+import com.bluesgao.esdemo.service.EsSearchService;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -23,12 +27,15 @@ import java.util.Map;
  * @Date：2021/1/26 14:37
  **/
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/search/")
 public class SearchController {
     @Resource
     private RestHighLevelClient client;
 
-    @GetMapping("/{index}")
+    @Resource
+    private EsSearchService searchService;
+
+    @GetMapping("{index}")
     @ResponseBody
     public List<Map<String, Object>> queryAll(@PathVariable String index) {
         SearchRequest searchRequest = new SearchRequest(index);
@@ -65,5 +72,11 @@ public class SearchController {
         }
 
         return resultList;
+    }
+
+    @PostMapping(value = "common",produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public PageResult<List<SearchResultDto>> commonSearch(@RequestBody EsSearchDto searchDto) {
+        return searchService.commonSearch(searchDto);
     }
 }

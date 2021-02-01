@@ -53,13 +53,13 @@ public class EsSearchServiceImpl implements EsSearchService {
         StringBuilder errMsg = new StringBuilder();
         if (null == param) {
             errMsg.append("入参为空;");
-        } else if (StringUtils.isBlank(param.getIdxName())) {
+        } else if (StringUtils.isBlank(param.getIndexName())) {
             errMsg.append("索引名为空;");
-        } else if (null != param.getPageSize() && param.getPageSize() > 1000) {
+        } else if (param.getPageSize() > 1000) {
             errMsg.append("pageSize不能大于1000;");
-        } else if (null != param.getPageNo() && param.getPageNo() < 1) {
+        } else if (param.getPageNo() < 1) {
             param.setPageNo(1);
-        } else if (param.getPageSize() <= 0 || param.getPageSize() == null) {
+        } else if (param.getPageSize() <= 0) {
             param.setPageSize(10);
         } else if (param.getPageNo() * param.getPageSize() > 10000) {
             errMsg.append("搜索总数量不能大于10000");
@@ -179,7 +179,7 @@ public class EsSearchServiceImpl implements EsSearchService {
         //SearchSourceBuilder的源过滤
         sourceBuilder.fetchSource(param.getIncludeFields(), param.getExcludeFields());
         //索引
-        SearchRequest searchRequest = new SearchRequest(param.getIdxName());
+        SearchRequest searchRequest = new SearchRequest(param.getIndexName());
         searchRequest.source(sourceBuilder);
         return searchRequest;
     }
@@ -196,7 +196,7 @@ public class EsSearchServiceImpl implements EsSearchService {
 
         //构造搜索请求
         SearchRequest searchRequest = buildSearchRequest(param);
-
+        log.info("构造搜索请求 searchRequest:{}", searchRequest.toString());
         SearchResponse searchResponse = null;
         try {
             searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
