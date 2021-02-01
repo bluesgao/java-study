@@ -68,8 +68,7 @@ public class EsSearchServiceImpl implements EsSearchService {
     }
 
 
-    private SearchRequest buildSearchRequest(EsSearchDto param) {
-
+    private BoolQueryBuilder genQueryBuilder(EsSearchDto param) {
         BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
         //ids
         if (null != param.getIds() && param.getIds().length > 0) {
@@ -99,6 +98,7 @@ public class EsSearchServiceImpl implements EsSearchService {
             }
         }
 
+        //mustNot
         if (null != param.getMustNotMap()) {
             Map<String, List<String>> ignoreMap = param.getMustNotMap();
             for (Map.Entry<String, List<String>> entry : ignoreMap.entrySet()) {
@@ -139,21 +139,24 @@ public class EsSearchServiceImpl implements EsSearchService {
         if (null != param.getNestedMap()) {
             Map<String, Map<String, List<String>>> nestedMap = param.getNestedMap();
             for (Map.Entry<String, Map<String, List<String>>> entry : nestedMap.entrySet()) {
-                String key = entry.getKey();
+                String path = entry.getKey();
                 Map<String, List<String>> value = entry.getValue();
-                if (null != key && value != null && value.size() > 0) {
+                if (null != path && value != null && value.size() > 0) {
                     for (Map.Entry<String, List<String>> e : value.entrySet()) {
-                        String k = e.getKey();
+                        //path.field
+                        String k = path + "." + e.getKey();
                         List<String> v = e.getValue();
-                        if (null != k && !CollectionUtils.isEmpty(v) && v.size() == 1) {
-                            boolBuilder.must(nestedQuery(key, boolQuery().must(termsQuery(k, v.get(0))), ScoreMode.None));
-                        } else if (null != k && !CollectionUtils.isEmpty(v) && v.size() > 1) {
-                            boolBuilder.must(nestedQuery(key, boolQuery().must(termsQuery(k, v.toArray())), ScoreMode.None));
-                        }
+                        boolBuilder.must(nestedQuery(path, boolQuery().must(termsQuery(k, v.toArray())), ScoreMode.None));
                     }
                 }
             }
         }
+
+        return boolBuilder;
+    }
+
+    private SearchRequest buildSearchRequest(EsSearchDto param) {
+
 
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         //MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("fields.entity_id", "319");//这里可以根据字段进行搜索，must表示符合条件的，相反的mustnot表示不符合条件的
@@ -164,7 +167,7 @@ public class EsSearchServiceImpl implements EsSearchService {
         //boolBuilder.must(matchQueryBuilder);
 
         //设置查询，可以是任何类型的QueryBuilder
-        sourceBuilder.query(boolBuilder);
+        sourceBuilder.query(genQueryBuilder(param));
 
 
         //pageno和pagesize转为form,size
@@ -184,7 +187,6 @@ public class EsSearchServiceImpl implements EsSearchService {
         return searchRequest;
     }
 
-
     @Override
     public PageResult<List<SearchResultDto>> commonSearch(EsSearchDto param) {
         Instant start = Instant.now();
@@ -196,7 +198,7 @@ public class EsSearchServiceImpl implements EsSearchService {
 
         //构造搜索请求
         SearchRequest searchRequest = buildSearchRequest(param);
-        log.info("构造搜索请求 searchRequest:{}", searchRequest.toString());
+        log.info("构造搜索请求 searchRequest:{}", searchRequest.source());
         SearchResponse searchResponse = null;
         try {
             searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
@@ -219,18 +221,18 @@ public class EsSearchServiceImpl implements EsSearchService {
             log.info("search -> {}", hit.getSourceAsString());
             SearchResultDto dto = new SearchResultDto();
             dto.setDataMap(hit.getSourceAsMap());
+            dto.setIdValue(hit.getId());//设置docid
             dataList.add(dto);
         }
 
         //设置分页参数
-        PageBean pb = new PageBean();
+        PageBean pb = new PageBean(param.getPageNo(), param.getPageSize());
         pb.setTotalCount(hits.getTotalHits().value);
 
         //日志
         long duration = Duration.between(start, Instant.now()).toMillis();
-        log.info("EsSearchService.commonSearch param:{},total count：{}，return count：{},spent:{} ms,search time {} ms,time out:{},slow query:{}",
-                JSON.toJSONString(param), hits.getTotalHits().value, dataList.size(), duration,
-                searchResponse.getTook().getMillis(), duration > 20000, duration > 2000);
+        log.info("EsSearchService.commonSearch metric param[{}],totalCount[{}]，returnCount[{}],rtTime[{}]ms,searchTime[{}]ms",
+                JSON.toJSONString(param), hits.getTotalHits().value, dataList.size(), duration, searchResponse.getTook().getMillis());
 
         return PageResult.success(dataList, pb);
     }
