@@ -8,6 +8,7 @@ import com.bluesgao.esdemo.entity.search.*;
 import com.bluesgao.esdemo.service.EsSearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -70,49 +71,50 @@ public class EsSearchServiceImpl implements EsSearchService {
         BoolQueryBuilder nestedBoolQuery = boolQuery();
 
         //match
-        for (Map.Entry<String, String> e : nestedDto.getMatchMap().entrySet()) {
-            //path.field
-            String k = path + "." + e.getKey();
-            nestedBoolQuery.must(termQuery(k, e.getValue()));
+        if (!CollectionUtils.isEmpty(nestedDto.getMatchMap())) {
+            for (Map.Entry<String, String> e : nestedDto.getMatchMap().entrySet()) {
+                //path.field
+                String k = path + "." + e.getKey();
+                nestedBoolQuery.must(termQuery(k, e.getValue()));
+            }
         }
 
         //filter
-        for (Map.Entry<String, List<String>> e : nestedDto.getFilterMap().entrySet()) {
-            //path.field
-            String k = path + "." + e.getKey();
-            List<String> valueList = e.getValue();
-            nestedBoolQuery.filter(termsQuery(k, valueList.toArray()));
+        if (!CollectionUtils.isEmpty(nestedDto.getFilterMap())) {
+            for (Map.Entry<String, List<String>> e : nestedDto.getFilterMap().entrySet()) {
+                //path.field
+                String k = path + "." + e.getKey();
+                List<String> valueList = e.getValue();
+                nestedBoolQuery.filter(termsQuery(k, valueList.toArray()));
+            }
         }
 
         //mustNot
-        for (Map.Entry<String, List<String>> e : nestedDto.getMustNotMap().entrySet()) {
-            //path.field
-            String k = path + "." + e.getKey();
-            List<String> valueList = e.getValue();
-            nestedBoolQuery.filter(termsQuery(k, valueList.toArray()));
+        if (!CollectionUtils.isEmpty(nestedDto.getMustNotMap())) {
+            for (Map.Entry<String, List<String>> e : nestedDto.getMustNotMap().entrySet()) {
+                //path.field
+                String k = path + "." + e.getKey();
+                List<String> valueList = e.getValue();
+                nestedBoolQuery.filter(termsQuery(k, valueList.toArray()));
+            }
         }
 
         //range
-        for (Map.Entry<String, RangeDto> e : nestedDto.getRangeMap().entrySet()) {
-            //path.field
-            String k = path + "." + e.getKey();
-            RangeDto rangeDto = e.getValue();
-            if (null == e.getKey() || null == rangeDto) {
-                continue;
-            }
-
-            if (null != rangeDto.getMin() || null != rangeDto.getMinStr()) {
-                nestedBoolQuery.filter(rangeQuery(e.getKey()).gt(null == rangeDto.getMin() ? rangeDto.getMinStr() : rangeDto.getMin()));
-            } else if (null != rangeDto.getMinE() || null != rangeDto.getMinEStr()) {
-                nestedBoolQuery.filter(rangeQuery(e.getKey()).gte(null == rangeDto.getMinE() ? rangeDto.getMinEStr() : rangeDto.getMinE()));
-            }
-
-            if (null != rangeDto.getMax() || null != rangeDto.getMaxStr()) {
-                nestedBoolQuery.filter(rangeQuery(e.getKey()).lt(null == rangeDto.getMax() ? rangeDto.getMaxStr() : rangeDto.getMax()));
-            } else if (null != rangeDto.getMaxE() || null != rangeDto.getMaxEStr()) {
-                nestedBoolQuery.filter(rangeQuery(e.getKey()).lte(null == rangeDto.getMaxE() ? rangeDto.getMaxEStr() : rangeDto.getMaxE()));
+        if (!CollectionUtils.isEmpty(nestedDto.getRangeMap())) {
+            for (Map.Entry<String, RangeDto> e : nestedDto.getRangeMap().entrySet()) {
+                //path.field
+                String k = path + "." + e.getKey();
+                RangeDto rangeDto = e.getValue();
+                if (null != rangeDto.getMin() && rangeDto.getMax() != null) {
+                    nestedBoolQuery.must(rangeQuery(k).gt(rangeDto.getMin()).lt(rangeDto.getMax()));
+                }
+                if (null != rangeDto.getMinStr() && rangeDto.getMaxStr() != null) {
+                    nestedBoolQuery.must(rangeQuery(k).gt(rangeDto.getMinStr()).lt(rangeDto.getMaxStr()));
+                }
+                //nestedBoolQuery.must(rangeQuery(k).from(32).to(34));
             }
         }
+        System.out.println(nestedBoolQuery.toString());
         return nestedBoolQuery;
     }
 
@@ -202,7 +204,7 @@ public class EsSearchServiceImpl implements EsSearchService {
             }*/
 
             for (Map.Entry<String, NestedDto> entry : param.getNestedMap().entrySet()) {
-                boolBuilder.must(genNestedQueryBuilder(entry.getKey(), entry.getValue()));
+                boolBuilder.must(nestedQuery(entry.getKey(), genNestedQueryBuilder(entry.getKey(), entry.getValue()), ScoreMode.None));
             }
         }
 
@@ -210,8 +212,6 @@ public class EsSearchServiceImpl implements EsSearchService {
     }
 
     private SearchRequest buildSearchRequest(EsSearchDto param) {
-
-
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         //MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("fields.entity_id", "319");//这里可以根据字段进行搜索，must表示符合条件的，相反的mustnot表示不符合条件的
         // RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("fields_timestamp"); //新建range条件
@@ -236,12 +236,14 @@ public class EsSearchServiceImpl implements EsSearchService {
         //SearchSourceBuilder的源过滤
         sourceBuilder.fetchSource(param.getIncludeFields(), param.getExcludeFields());
         //排序
-        for (SortDto sortDto : param.getSortList()) {
-            SortOrder sortorder = SortOrder.DESC;
-            if (sortDto.getSortEnum().getCode().equals(SortEnum.ASC)) {
-                sortorder = SortOrder.ASC;
+        if (!CollectionUtils.isEmpty(param.getSortList())) {
+            for (SortDto sortDto : param.getSortList()) {
+                SortOrder sortorder = SortOrder.DESC;
+                if (sortDto.getSortEnum().getCode().equals(SortEnum.ASC)) {
+                    sortorder = SortOrder.ASC;
+                }
+                sourceBuilder.sort(sortDto.getColumn(), sortorder);
             }
-            sourceBuilder.sort(sortDto.getColumn(), sortorder);
         }
         //索引
         SearchRequest searchRequest = new SearchRequest(param.getIndexName());
