@@ -4,13 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.bluesgao.esdemo.common.PageBean;
 import com.bluesgao.esdemo.common.PageResult;
 import com.bluesgao.esdemo.common.ResultCode;
-import com.bluesgao.esdemo.entity.search.EsSearchDto;
-import com.bluesgao.esdemo.entity.search.RangeDto;
-import com.bluesgao.esdemo.entity.search.SearchResultDto;
+import com.bluesgao.esdemo.entity.search.*;
 import com.bluesgao.esdemo.service.EsSearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -22,6 +19,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -67,6 +65,56 @@ public class EsSearchServiceImpl implements EsSearchService {
         return errMsg.toString();
     }
 
+    private BoolQueryBuilder genNestedQueryBuilder(String path, NestedDto nestedDto) {
+        //按照path字段组装dsl
+        BoolQueryBuilder nestedBoolQuery = boolQuery();
+
+        //match
+        for (Map.Entry<String, String> e : nestedDto.getMatchMap().entrySet()) {
+            //path.field
+            String k = path + "." + e.getKey();
+            nestedBoolQuery.must(termQuery(k, e.getValue()));
+        }
+
+        //filter
+        for (Map.Entry<String, List<String>> e : nestedDto.getFilterMap().entrySet()) {
+            //path.field
+            String k = path + "." + e.getKey();
+            List<String> valueList = e.getValue();
+            nestedBoolQuery.filter(termsQuery(k, valueList.toArray()));
+        }
+
+        //mustNot
+        for (Map.Entry<String, List<String>> e : nestedDto.getMustNotMap().entrySet()) {
+            //path.field
+            String k = path + "." + e.getKey();
+            List<String> valueList = e.getValue();
+            nestedBoolQuery.filter(termsQuery(k, valueList.toArray()));
+        }
+
+        //range
+        for (Map.Entry<String, RangeDto> e : nestedDto.getRangeMap().entrySet()) {
+            //path.field
+            String k = path + "." + e.getKey();
+            RangeDto rangeDto = e.getValue();
+            if (null == e.getKey() || null == rangeDto) {
+                continue;
+            }
+
+            if (null != rangeDto.getMin() || null != rangeDto.getMinStr()) {
+                nestedBoolQuery.filter(rangeQuery(e.getKey()).gt(null == rangeDto.getMin() ? rangeDto.getMinStr() : rangeDto.getMin()));
+            } else if (null != rangeDto.getMinE() || null != rangeDto.getMinEStr()) {
+                nestedBoolQuery.filter(rangeQuery(e.getKey()).gte(null == rangeDto.getMinE() ? rangeDto.getMinEStr() : rangeDto.getMinE()));
+            }
+
+            if (null != rangeDto.getMax() || null != rangeDto.getMaxStr()) {
+                nestedBoolQuery.filter(rangeQuery(e.getKey()).lt(null == rangeDto.getMax() ? rangeDto.getMaxStr() : rangeDto.getMax()));
+            } else if (null != rangeDto.getMaxE() || null != rangeDto.getMaxEStr()) {
+                nestedBoolQuery.filter(rangeQuery(e.getKey()).lte(null == rangeDto.getMaxE() ? rangeDto.getMaxEStr() : rangeDto.getMaxE()));
+            }
+        }
+        return nestedBoolQuery;
+    }
 
     private BoolQueryBuilder genQueryBuilder(EsSearchDto param) {
         BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
@@ -135,20 +183,26 @@ public class EsSearchServiceImpl implements EsSearchService {
             }
         }
 
-        //nested
+        //nested todo range
         if (null != param.getNestedMap()) {
-            Map<String, Map<String, List<String>>> nestedMap = param.getNestedMap();
+            /*Map<String, Map<String, List<String>>> nestedMap = param.getNestedMap();
             for (Map.Entry<String, Map<String, List<String>>> entry : nestedMap.entrySet()) {
                 String path = entry.getKey();
                 Map<String, List<String>> value = entry.getValue();
                 if (null != path && value != null && value.size() > 0) {
+                    BoolQueryBuilder nestedBoolQuery = boolQuery();
                     for (Map.Entry<String, List<String>> e : value.entrySet()) {
                         //path.field
                         String k = path + "." + e.getKey();
                         List<String> v = e.getValue();
-                        boolBuilder.must(nestedQuery(path, boolQuery().must(termsQuery(k, v.toArray())), ScoreMode.None));
+                        nestedBoolQuery.must(termsQuery(k, v.toArray()));
                     }
+                    boolBuilder.must(nestedQuery(path, nestedBoolQuery, ScoreMode.None));
                 }
+            }*/
+
+            for (Map.Entry<String, NestedDto> entry : param.getNestedMap().entrySet()) {
+                boolBuilder.must(genNestedQueryBuilder(entry.getKey(), entry.getValue()));
             }
         }
 
@@ -181,9 +235,18 @@ public class EsSearchServiceImpl implements EsSearchService {
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         //SearchSourceBuilder的源过滤
         sourceBuilder.fetchSource(param.getIncludeFields(), param.getExcludeFields());
+        //排序
+        for (SortDto sortDto : param.getSortList()) {
+            SortOrder sortorder = SortOrder.DESC;
+            if (sortDto.getSortEnum().getCode().equals(SortEnum.ASC)) {
+                sortorder = SortOrder.ASC;
+            }
+            sourceBuilder.sort(sortDto.getColumn(), sortorder);
+        }
         //索引
         SearchRequest searchRequest = new SearchRequest(param.getIndexName());
         searchRequest.source(sourceBuilder);
+
         return searchRequest;
     }
 

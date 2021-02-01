@@ -25,7 +25,7 @@ public class EsSearchDto implements Serializable {
 
     private Map<String, RangeDto> rangeMap;
 
-    private Map<String, Map<String, List<String>>> nestedMap;//嵌套
+    private Map<String, NestedDto> nestedMap;//嵌套
 
     private String[] includeFields;//包含的字段
 
