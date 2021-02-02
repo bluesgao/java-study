@@ -37,6 +37,7 @@
         <module>spi-demo</module>
         <module>tx-demo</module>
         <module>print-table</module>
+        <module>spring-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>
