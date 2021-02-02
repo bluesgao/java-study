@@ -43,4 +43,4 @@ GET class_student/_search
 {"indexName":"class_student","nestedMap":{"students":{"matchMap":{"name":"科比"}}}} 
 {"indexName":"class_student","nestedMap":{"students":{"matchMap":{"name":"科比"}}}} 
 
-
+{ "indexName": "class_student", "nestedMap": { "students": { "matchMap": { "name": "科比" }, "rangeMap": { "age": { "fromDto": {"from":32}, "toDto": {"to":35} } } } } }

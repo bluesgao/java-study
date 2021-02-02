@@ -17,6 +17,7 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.IdsQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -73,6 +74,9 @@ public class EsSearchServiceImpl implements EsSearchService {
         //match
         if (!CollectionUtils.isEmpty(nestedDto.getMatchMap())) {
             for (Map.Entry<String, String> e : nestedDto.getMatchMap().entrySet()) {
+                if (null == e.getKey() || null == e.getValue()) {
+                    continue;
+                }
                 //path.field
                 String k = path + "." + e.getKey();
                 nestedBoolQuery.must(termQuery(k, e.getValue()));
@@ -82,6 +86,9 @@ public class EsSearchServiceImpl implements EsSearchService {
         //filter
         if (!CollectionUtils.isEmpty(nestedDto.getFilterMap())) {
             for (Map.Entry<String, List<String>> e : nestedDto.getFilterMap().entrySet()) {
+                if (null == e.getKey() || null == e.getValue()) {
+                    continue;
+                }
                 //path.field
                 String k = path + "." + e.getKey();
                 List<String> valueList = e.getValue();
@@ -92,6 +99,9 @@ public class EsSearchServiceImpl implements EsSearchService {
         //mustNot
         if (!CollectionUtils.isEmpty(nestedDto.getMustNotMap())) {
             for (Map.Entry<String, List<String>> e : nestedDto.getMustNotMap().entrySet()) {
+                if (null == e.getKey() || null == e.getValue()) {
+                    continue;
+                }
                 //path.field
                 String k = path + "." + e.getKey();
                 List<String> valueList = e.getValue();
@@ -102,15 +112,22 @@ public class EsSearchServiceImpl implements EsSearchService {
         //range
         if (!CollectionUtils.isEmpty(nestedDto.getRangeMap())) {
             for (Map.Entry<String, RangeDto> e : nestedDto.getRangeMap().entrySet()) {
+                if (null == e.getKey() || null == e.getValue()) {
+                    continue;
+                }
                 //path.field
                 String k = path + "." + e.getKey();
                 RangeDto rangeDto = e.getValue();
-                if (null != rangeDto.getMin() && rangeDto.getMax() != null) {
-                    nestedBoolQuery.must(rangeQuery(k).gt(rangeDto.getMin()).lt(rangeDto.getMax()));
+                RangeQueryBuilder rangeQueryBuilder = rangeQuery(k);
+                if (rangeDto.getFromDto() != null) {
+                    rangeQueryBuilder.from(rangeDto.getFromDto().getFrom(), rangeDto.getFromDto().isIncludeUpper());
                 }
-                if (null != rangeDto.getMinStr() && rangeDto.getMaxStr() != null) {
-                    nestedBoolQuery.must(rangeQuery(k).gt(rangeDto.getMinStr()).lt(rangeDto.getMaxStr()));
+
+                if (rangeDto.getToDto() != null) {
+                    rangeQueryBuilder.to(rangeDto.getToDto().getTo(), rangeDto.getToDto().isIncludeLower());
                 }
+
+                nestedBoolQuery.must(rangeQueryBuilder);
                 //nestedBoolQuery.must(rangeQuery(k).from(32).to(34));
             }
         }
@@ -130,14 +147,19 @@ public class EsSearchServiceImpl implements EsSearchService {
         //match
         if (null != param.getMatchMap()) {
             for (Map.Entry<String, String> entry : param.getMatchMap().entrySet()) {
+                if (null == entry.getKey() || null == entry.getValue()) {
+                    continue;
+                }
                 boolBuilder.must(matchQuery(entry.getKey(), entry.getValue()));
             }
         }
 
         //filter
         if (null != param.getFilterMap()) {
-            Map<String, List<String>> filterMap = param.getFilterMap();
-            for (Map.Entry<String, List<String>> entry : filterMap.entrySet()) {
+            for (Map.Entry<String, List<String>> entry : param.getFilterMap().entrySet()) {
+                if (null == entry.getKey() || null == entry.getValue()) {
+                    continue;
+                }
                 List<String> valueList = entry.getValue();
                 if (null != entry.getKey() && !CollectionUtils.isEmpty(valueList) && valueList.size() == 1) {
                     boolBuilder.filter(termQuery(entry.getKey(), valueList.get(0)));
@@ -150,8 +172,10 @@ public class EsSearchServiceImpl implements EsSearchService {
 
         //mustNot
         if (null != param.getMustNotMap()) {
-            Map<String, List<String>> ignoreMap = param.getMustNotMap();
-            for (Map.Entry<String, List<String>> entry : ignoreMap.entrySet()) {
+            for (Map.Entry<String, List<String>> entry : param.getMustNotMap().entrySet()) {
+                if (null == entry.getKey() || null == entry.getValue()) {
+                    continue;
+                }
                 List<String> valueList = entry.getValue();
                 if (null != entry.getKey() && !CollectionUtils.isEmpty(valueList) && valueList.size() == 1) {
                     boolBuilder.mustNot(termQuery(entry.getKey(), valueList.get(0)));
@@ -164,45 +188,28 @@ public class EsSearchServiceImpl implements EsSearchService {
 
         //range
         if (null != param.getRangeMap()) {
-            Map<String, RangeDto> rangeMap = param.getRangeMap();
-            for (Map.Entry<String, RangeDto> entry : rangeMap.entrySet()) {
-                RangeDto rangeDTO = entry.getValue();
-                if (null == entry.getKey() || null == rangeDTO) {
+            for (Map.Entry<String, RangeDto> entry : param.getRangeMap().entrySet()) {
+                if (null == entry.getKey() || null == entry.getValue()) {
                     continue;
                 }
 
-                if (null != rangeDTO.getMin() || null != rangeDTO.getMinStr()) {
-                    boolBuilder.filter(rangeQuery(entry.getKey()).gt(null == rangeDTO.getMin() ? rangeDTO.getMinStr() : rangeDTO.getMin()));
-                } else if (null != rangeDTO.getMinE() || null != rangeDTO.getMinEStr()) {
-                    boolBuilder.filter(rangeQuery(entry.getKey()).gte(null == rangeDTO.getMinE() ? rangeDTO.getMinEStr() : rangeDTO.getMinE()));
+                String k = entry.getKey();
+                RangeDto rangeDto = entry.getValue();
+                RangeQueryBuilder rangeQueryBuilder = rangeQuery(k);
+                if (rangeDto.getFromDto() != null) {
+                    rangeQueryBuilder.from(rangeDto.getFromDto().getFrom(), rangeDto.getFromDto().isIncludeUpper());
                 }
 
-                if (null != rangeDTO.getMax() || null != rangeDTO.getMaxStr()) {
-                    boolBuilder.filter(rangeQuery(entry.getKey()).lt(null == rangeDTO.getMax() ? rangeDTO.getMaxStr() : rangeDTO.getMax()));
-                } else if (null != rangeDTO.getMaxE() || null != rangeDTO.getMaxEStr()) {
-                    boolBuilder.filter(rangeQuery(entry.getKey()).lte(null == rangeDTO.getMaxE() ? rangeDTO.getMaxEStr() : rangeDTO.getMaxE()));
+                if (rangeDto.getToDto() != null) {
+                    rangeQueryBuilder.to(rangeDto.getToDto().getTo(), rangeDto.getToDto().isIncludeLower());
                 }
+
+                boolBuilder.filter(rangeQueryBuilder);
             }
         }
 
-        //nested todo range
+        //nested
         if (null != param.getNestedMap()) {
-            /*Map<String, Map<String, List<String>>> nestedMap = param.getNestedMap();
-            for (Map.Entry<String, Map<String, List<String>>> entry : nestedMap.entrySet()) {
-                String path = entry.getKey();
-                Map<String, List<String>> value = entry.getValue();
-                if (null != path && value != null && value.size() > 0) {
-                    BoolQueryBuilder nestedBoolQuery = boolQuery();
-                    for (Map.Entry<String, List<String>> e : value.entrySet()) {
-                        //path.field
-                        String k = path + "." + e.getKey();
-                        List<String> v = e.getValue();
-                        nestedBoolQuery.must(termsQuery(k, v.toArray()));
-                    }
-                    boolBuilder.must(nestedQuery(path, nestedBoolQuery, ScoreMode.None));
-                }
-            }*/
-
             for (Map.Entry<String, NestedDto> entry : param.getNestedMap().entrySet()) {
                 boolBuilder.must(nestedQuery(entry.getKey(), genNestedQueryBuilder(entry.getKey(), entry.getValue()), ScoreMode.None));
             }
