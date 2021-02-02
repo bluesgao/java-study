@@ -27,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -126,7 +127,6 @@ public class EsSearchServiceImpl implements EsSearchService {
                 if (rangeDto.getToDto() != null) {
                     rangeQueryBuilder.to(rangeDto.getToDto().getTo(), rangeDto.getToDto().isIncludeLower());
                 }
-
                 nestedBoolQuery.must(rangeQueryBuilder);
                 //nestedBoolQuery.must(rangeQuery(k).from(32).to(34));
             }

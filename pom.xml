@@ -36,6 +36,7 @@
         <module>dynamic-datasource-demo</module>
         <module>spi-demo</module>
         <module>tx-demo</module>
+        <module>print-table</module>
     </modules>
     <packaging>pom</packaging>
 </project>
