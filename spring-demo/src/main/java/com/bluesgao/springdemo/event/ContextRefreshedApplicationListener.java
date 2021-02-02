@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName：ContextRefreshedApplicationListener
- * @Description：
+ * @Description：实现 ApplicationListener 接口
  * @Author：bluesgao
  * @Date：2021/2/2 16:05
  **/
