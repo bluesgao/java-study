@@ -1,4 +1,4 @@
-package com.bluesgao.springdemo.customevent;
+package com.bluesgao.springdemo.ioc.customevent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;

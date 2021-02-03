@@ -1,4 +1,4 @@
-package com.bluesgao.springdemo.event;
+package com.bluesgao.springdemo.ioc.event;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
