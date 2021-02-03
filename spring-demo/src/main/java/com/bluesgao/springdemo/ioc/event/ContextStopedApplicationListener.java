@@ -1,6 +1,5 @@
 package com.bluesgao.springdemo.ioc.event;
 
-import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.context.event.EventListener;
 
