@@ -38,6 +38,10 @@
         <module>tx-demo</module>
         <module>print-table</module>
         <module>spring-demo</module>
+        <module>dubbo-demo</module>
+        <module>dubbo-api</module>
+        <module>plugin-frw-demo</module>
+        <module>mock-demo</module>
     </modules>
     <packaging>pom</packaging>
 </project>
