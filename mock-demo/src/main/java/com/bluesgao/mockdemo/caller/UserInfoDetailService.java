@@ -26,7 +26,6 @@ public class UserInfoDetailService {
         uaddrs.add(uId + "地址2");
         Mockito.when(as.getAddressInfo(uId)).thenReturn(new AddressDto(uId, uaddrs));
 
-
         UserDto userDto = us.getUserInfo(uId);
 
         AddressDto addressDto = as.getAddressInfo(uId);
