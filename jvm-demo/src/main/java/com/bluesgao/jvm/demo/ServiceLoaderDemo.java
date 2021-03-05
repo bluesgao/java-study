@@ -34,13 +34,13 @@ import java.util.ServiceLoader;
 public class ServiceLoaderDemo {
     public static void main(String[] args) {
         System.out.println("serviceloader :" + ServiceLoader.class.getClassLoader());
+        System.out.println("current thread classloader[" + Thread.currentThread().getContextClassLoader() + "]");
         //注意：需要在pom文件添加mysql-connector-java的坐标
         ServiceLoader cl = ServiceLoader.load(Driver.class);
         Iterator itr = cl.iterator();
         while (itr.hasNext()) {
             Driver d = (Driver) itr.next();
-            System.out.println("driver class[" + d.getClass() + "] classloader[" + d.getClass().getClassLoader() + "]");
-            System.out.println("current thread classloader[" + Thread.currentThread().getContextClassLoader() + "]");
+            System.out.println("classloader[" + d.getClass().getClassLoader() + "]"+"driverclass[" + d.getClass() + "] ");
         }
     }
 }
