@@ -1,4 +1,4 @@
-package com.bluesgao.jvm.demo;
+package com.bluesgao.jvm.demo.cl;
 
 /**
  * @ClassName：ClassLoaderDemo

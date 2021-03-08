@@ -1,4 +1,4 @@
-package com.bluesgao.jvm.demo;
+package com.bluesgao.jvm.demo.ojb;
 
 import java.io.File;
 import java.io.FileInputStream;

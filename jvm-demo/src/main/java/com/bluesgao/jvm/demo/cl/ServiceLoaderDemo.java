@@ -1,4 +1,4 @@
-package com.bluesgao.jvm.demo;
+package com.bluesgao.jvm.demo.cl;
 
 import java.sql.Driver;
 import java.util.Iterator;

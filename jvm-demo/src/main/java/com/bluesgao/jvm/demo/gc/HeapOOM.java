@@ -1,4 +1,4 @@
-package com.bluesgao.jvm.demo;
+package com.bluesgao.jvm.demo.gc;
 
 import java.util.ArrayList;
 import java.util.List;
